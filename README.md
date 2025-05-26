@@ -25,7 +25,7 @@ KiteGPT is a Streamlit-based AI assistant that integrates with Zerodha's Kite Co
 
 ## 🧪 Setup Instructions
 
-1. **Clone this repo**:
+1. **Clone this repo:**
    ```bash
    git clone https://github.com/Jayneet123/KiteGPT.git
    cd KiteGPT
