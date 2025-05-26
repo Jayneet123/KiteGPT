@@ -27,6 +27,10 @@ df_display["last_price"] = df_display["last_price"].apply(format_currency)
 df_display["pnl"] = df_display["pnl"].apply(format_currency)
 df_display["pnl_pct"] = df["pnl_pct"].apply(lambda x: f"{x:.2f}%")
 
+total_invested = round(sum(df["invested_value"]),2)
+current_value = round(sum(df["current_value"]),2)
+pnl = round(current_value - total_invested,2)
+
 # Color-coded P&L
 def color_pnl(val):
     try:
@@ -40,15 +44,22 @@ styled_df = df_display.style.applymap(color_pnl, subset=["pnl", "pnl_pct"])
 st.subheader("Your Holdings")
 st.dataframe(styled_df, use_container_width=True)
 
-with st.spinner("🔍 Generating holdings report..."):
-    pipeline_str = get_pipeline_from_llm(holdings)
+st.text(f"Total Invested Value: {total_invested}")
+st.text(f"Current Value: {current_value}")
+st.text(f"Overall P&L: {pnl}")
 
-st.subheader("🧱 Kite Holdings")
-st.code(pipeline_str, language="json")
+generate = st.button("Generate Report")
 
-user_input = st.text_input("💬 Ask a question:")
+if generate:
+    with st.spinner("🔍 Generating holdings report..."):
+        pipeline_str = get_pipeline_from_llm(holdings)
+    
+    st.subheader("🧱 Kite Holdings")
+    st.code(pipeline_str, language="json")
 
-if user_input: 
-    st.subheader("📈 Feedback")
-    results = run_pipeline_for_prompt(pipeline_str,user_input,holdings)
-    st.code(results)
+    user_input = st.text_input("💬 Ask a question:")
+
+    if user_input: 
+        st.subheader("📈 Feedback")
+        results = run_pipeline_for_prompt(pipeline_str,user_input,holdings)
+        st.code(results)
