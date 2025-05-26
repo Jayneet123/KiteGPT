@@ -1,11 +1,18 @@
 import streamlit as st
 from utils import get_pipeline_from_llm, run_pipeline_for_prompt
-from main import holdings
+from kite_utils import initialize_kite
 import pandas as pd
 
 st.set_page_config(page_title="Kite LLM Assistant", layout="wide")
 st.title("📊 LLM-Powered Stock Assistant")
 st.markdown("Ask any question over your holdings.")
+
+kite = initialize_kite()
+
+if kite:
+    print("📦 Orders:", kite.orders())
+    print("📊 Holdings:", kite.holdings())
+    holdings = kite.holdings()
 
 # Clean & transform data
 df = pd.DataFrame(holdings)
@@ -48,18 +55,16 @@ st.text(f"Total Invested Value: {total_invested}")
 st.text(f"Current Value: {current_value}")
 st.text(f"Overall P&L: {pnl}")
 
-generate = st.button("Generate Report")
 
-if generate:
-    with st.spinner("🔍 Generating holdings report..."):
-        pipeline_str = get_pipeline_from_llm(holdings)
+with st.spinner("🔍 Generating holdings report..."):
+    pipeline_str = get_pipeline_from_llm(holdings)
     
-    st.subheader("🧱 Kite Holdings")
-    st.code(pipeline_str, language="json")
+st.subheader("🧱 Kite Holdings")
+st.text(pipeline_str)
 
-    user_input = st.text_input("💬 Ask a question:")
+user_input = st.text_input("💬 Ask a question:")
 
-    if user_input: 
-        st.subheader("📈 Feedback")
-        results = run_pipeline_for_prompt(pipeline_str,user_input,holdings)
-        st.code(results)
+if user_input: 
+    st.subheader("📈 Feedback")
+    results = run_pipeline_for_prompt(pipeline_str,user_input,holdings)
+    st.text(results)

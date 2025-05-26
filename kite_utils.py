@@ -6,6 +6,7 @@ import json
 import logging
 from kiteconnect import KiteConnect
 from datetime import datetime
+import streamlit as st
 
 TOKEN_FILE = "kite_token.json"
 
@@ -37,24 +38,24 @@ def initialize_kite():
         try:
             # Test if token works by calling a harmless endpoint
             kite.profile()
-            print("✅ Reused existing access_token")
+            st.text("✅ Reused existing access_token")
             return kite
         except Exception as e:
-            print("⚠️ Token expired or invalid. Login required.")
+            st.text("⚠️ Token expired or invalid. Login required.")
     
     # Token doesn't exist or is invalid → Ask user to login
     login_url = kite.login_url()
-    print("🔗 Login here:", login_url)
-    request_token = input("Paste request_token from URL: ").strip()
+    st.code(f"🔗 Login here:{login_url}")
+    request_token = st.text_input("Paste request_token from URL: ").strip()
 
     # Exchange token
     try:
         session = kite.generate_session(request_token, api_secret=api_secret)
         kite.set_access_token(session["access_token"])
         save_token(session)
-        print("✅ New token saved successfully.")
+        st.text("✅ New token saved successfully.")
         return kite
     except Exception as e:
-        print("❌ Token generation failed:", e)
+        st.text("❌ Token generation failed:", e)
         return None
 
