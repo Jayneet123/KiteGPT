@@ -27,25 +27,25 @@ KiteGPT is a Streamlit-based AI assistant that integrates with Zerodha's Kite Co
 
 1. **Clone this repo**:
    ```bash
-   git clone https://github.com/Jayneet123/KiteGPT.git
-   cd KiteGPT
+      git clone https://github.com/Jayneet123/KiteGPT.git
+      cd KiteGPT
    ```
    
 2. **Install Dependencies**
   ```bash
-  pip install -r requirements.txt
+     pip install -r requirements.txt
 ```
 
 3. **Create .env with your API keys:**
   ```bash
-  KITE_API=your_kite_api_key
-KITE_API_SECRET=your_kite_api_secret
-OPENAI_API_KEY=your_openrouter_api_key
+   KITE_API=your_kite_api_key
+   KITE_API_SECRET=your_kite_api_secret
+   OPENAI_API_KEY=your_openrouter_api_key
   ```
 
 4. **Start the app:**
   ```bash
-  streamlit run streamlit_app.py
+     streamlit run streamlit_app.py
   ```
 
 First-time login:
