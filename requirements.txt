@@ -1,0 +1,7 @@
+streamlit
+pymongo
+python-dotenv
+langchain
+openai
+requests
+kiteconnect
